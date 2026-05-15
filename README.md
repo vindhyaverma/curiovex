@@ -35,16 +35,6 @@ It is designed for people who use long-form videos, podcasts, interviews, lectur
 - Runs AI reasoning through a lightweight local backend.
 - Injects a polished floating intelligence panel inside YouTube.
 
-## Screenshots
-
-<p align="center">
-  <img src="assets/screenshots/curiovex-panel.png" alt="Curiovex AI panel injected into YouTube" width="900" />
-</p>
-
-<p align="center">
-  <img src="assets/screenshots/curiovex-panel-detail.png" alt="Curiovex AI panel with structured insights" width="900" />
-</p>
-
 ## Core Philosophy
 
 > Stability first. Intelligence second.
