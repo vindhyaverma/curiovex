@@ -1,5 +1,3 @@
-<div align="center">
-  <img src="assets/curiovex-mark.svg" width="116" height="116" alt="Curiovex logo" />
 
   <h1>Curiovex</h1>
 
