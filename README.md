@@ -1,18 +1,18 @@
 <div align="center">
-  <img src="assets/icon.png" width="104" height="104" alt="Curiovex logo" />
+  <img src="assets/curiovex-mark.svg" width="116" height="116" alt="Curiovex logo" />
 
-  <h1>Curiovex AI</h1>
+  <h1>Curiovex</h1>
 
   <p>
-    <strong>An AI-powered YouTube intelligence layer for fast summaries, deep insights, and action-ready learning notes.</strong>
+    <strong>AI-powered YouTube intelligence extraction engine built as a Chrome Extension + FastAPI backend.</strong>
   </p>
 
   <p>
-    <a href="https://www.plasmo.com/"><img alt="Plasmo" src="https://img.shields.io/badge/Plasmo-0.90.5-111111?style=for-the-badge" /></a>
-    <a href="https://react.dev/"><img alt="React" src="https://img.shields.io/badge/React-18.2-149ECA?style=for-the-badge&logo=react&logoColor=white" /></a>
-    <a href="https://www.typescriptlang.org/"><img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.3-3178C6?style=for-the-badge&logo=typescript&logoColor=white" /></a>
-    <a href="https://fastapi.tiangolo.com/"><img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi&logoColor=white" /></a>
-    <a href="https://groq.com/"><img alt="Groq" src="https://img.shields.io/badge/Groq-Llama_3.1-F55036?style=for-the-badge" /></a>
+    <a href="https://www.plasmo.com/"><img alt="Plasmo" src="https://img.shields.io/badge/Extension-Plasmo-111111?style=for-the-badge" /></a>
+    <a href="https://www.typescriptlang.org/"><img alt="TypeScript" src="https://img.shields.io/badge/Frontend-TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" /></a>
+    <a href="https://fastapi.tiangolo.com/"><img alt="FastAPI" src="https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white" /></a>
+    <a href="https://groq.com/"><img alt="Groq" src="https://img.shields.io/badge/LLM-Groq-F55036?style=for-the-badge" /></a>
+    <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/License-MIT-F8C84E?style=for-the-badge" /></a>
   </p>
 </div>
 
@@ -20,210 +20,274 @@
 
 ## Overview
 
-Curiovex AI is a Chrome extension that adds an intelligent analysis panel directly to YouTube. Open a video, let the extension read its transcript through the local backend, and get a focused breakdown of what matters: summary, topic tags, key insights, action items, difficulty level, learning value, and the audience the video is best suited for.
+Curiovex analyzes YouTube videos using transcript extraction and LLM reasoning, then renders structured insights directly inside the YouTube interface.
 
-The project combines a lightweight Plasmo extension with a FastAPI backend powered by Groq's `llama-3.1-8b-instant` model. It is built for people who learn from videos but do not want to lose the signal inside long content.
+It is designed for people who use long-form videos, podcasts, interviews, lectures, and business content as a learning source, but want the knowledge compressed into a clean, action-ready format.
 
-## What It Does
+## What Curiovex Does
 
-- Summarizes YouTube videos from their transcripts.
-- Extracts practical key insights and action items.
-- Adds topic tags for quick scanning.
-- Scores the video's difficulty as Beginner, Intermediate, or Advanced.
-- Estimates learning value as Low, Medium, or High.
-- Recommends who the video is suitable for.
-- Renders everything in a polished floating panel on the YouTube watch page.
-- Handles transcript or API failures with a readable fallback state.
+- Extracts YouTube video transcripts.
+- Summarizes long videos instantly.
+- Generates structured key insights.
+- Converts podcasts and interviews into readable knowledge notes.
+- Supports educational, business, and founder-style analysis.
+- Handles English and Hindi transcript fallback.
+- Runs AI reasoning through a lightweight local backend.
+- Injects a polished floating intelligence panel inside YouTube.
 
-## Preview
+## Screenshots
 
-The extension appears as a dark intelligence panel on YouTube, positioned over the current video page.
+<p align="center">
+  <img src="assets/screenshots/curiovex-panel.png" alt="Curiovex AI panel injected into YouTube" width="900" />
+</p>
 
-```text
-Curiovex AI
+<p align="center">
+  <img src="assets/screenshots/curiovex-panel-detail.png" alt="Curiovex AI panel with structured insights" width="900" />
+</p>
 
-Brief summary of the video...
+## Core Philosophy
 
-[Topic] [Learning] [Strategy]
+> Stability first. Intelligence second.
 
-Key Insights
-- Insight one
-- Insight two
-- Insight three
+Curiovex was rebuilt around a deliberately minimal architecture. Earlier experiments explored local embeddings, ONNX inference, browser-side transformers, RAG pipelines, vector databases, OpenRouter streaming, chunk ranking, and background inference workers.
 
-Action Items
-- Action one
-- Action two
-- Action three
+Those systems were powerful on paper, but unstable in practice. They caused browser freezes, WASM deadlocks, timeout loops, memory pressure, stale extension state, and debugging chaos.
 
-Difficulty: Intermediate
-Learning Value: High
-```
+The current system is intentionally:
 
-## Tech Stack
-
-| Layer | Tools |
-| --- | --- |
-| Browser extension | Plasmo, Chrome Manifest V3 |
-| UI | React, TypeScript |
-| Content script | YouTube page extraction and panel injection |
-| Backend | FastAPI, Python |
-| Transcript source | `youtube-transcript-api` |
-| AI model | Groq `llama-3.1-8b-instant` |
+- deterministic
+- lightweight
+- fast
+- easy to debug
+- local-first
+- stable enough to extend
 
 ## Architecture
 
 ```mermaid
-flowchart LR
-  A["YouTube watch page"] --> B["Plasmo content script"]
-  B --> C["Video metadata + video ID"]
-  C --> D["FastAPI /analyze endpoint"]
-  D --> E["YouTube transcript fetch"]
-  E --> F["Groq Llama 3.1 analysis"]
-  F --> G["Structured JSON response"]
-  G --> H["Curiovex AI floating panel"]
+flowchart TD
+  A["YouTube Video"] --> B["Chrome Extension"]
+  B --> C["FastAPI Backend"]
+  C --> D["Transcript Extraction"]
+  D --> E["Groq LLM Inference"]
+  E --> F["Structured AI Insights"]
+  F --> G["Rendered Inside YouTube"]
 ```
+
+## System Design
+
+### Frontend
+
+The extension is built with TypeScript and Plasmo.
+
+Responsibilities:
+
+- Detect the current YouTube watch page.
+- Extract the active video ID and page metadata.
+- Send the analysis request to the local backend.
+- Inject the Curiovex panel into the YouTube DOM.
+- Render summaries, tags, insights, action items, difficulty, learning value, and suitable audience.
+- Show a graceful fallback when the backend or transcript extraction fails.
+
+### Backend
+
+The backend is built with FastAPI and Python.
+
+Responsibilities:
+
+- Receive video analysis requests.
+- Fetch transcripts with language fallback.
+- Trim transcript input for faster inference.
+- Send a compact prompt to Groq.
+- Return structured JSON to the extension.
+
+## Features
+
+### Working Features
+
+- YouTube watch-page integration.
+- Floating dark intelligence panel.
+- Transcript-based video summarization.
+- Topic tag generation.
+- Key insight extraction.
+- Action item extraction.
+- Difficulty scoring.
+- Learning value scoring.
+- Suitable-audience recommendation.
+- English and Hindi transcript fallback.
+- Local FastAPI transport.
+- CORS-safe localhost development.
+- Error recovery for unavailable transcripts and failed AI responses.
+
+### Removed Systems
+
+| Removed system | Why it was removed |
+| --- | --- |
+| ONNX Runtime | Browser freezes and heavy runtime cost |
+| Xenova Transformers | Large memory overhead |
+| Local embeddings | WASM deadlocks and slow startup |
+| OpenRouter streaming | Transport instability |
+| Browser-side LLMs | Unstable extension lifecycle |
+| RAG pipelines | Over-engineered for the current product |
+| Vector database | Unnecessary complexity |
+| Chunk ranking | Premature optimization |
+| Background AI workers | Hard to debug reliably |
+
+## Tech Stack
+
+| Layer | Technology |
+| --- | --- |
+| Frontend | TypeScript |
+| Extension framework | Plasmo |
+| Browser platform | Chrome Extension APIs, Manifest V3 |
+| Backend | FastAPI, Python |
+| Transcript extraction | `youtube-transcript-api` |
+| AI inference | Groq SDK |
+| Transport | Localhost HTTP + Fetch API |
 
 ## Project Structure
 
 ```text
 curiovex/
 ├── assets/
-│   └── icon.png
+│   ├── curiovex-mark.svg
+│   ├── icon.png
+│   └── screenshots/
+│       ├── curiovex-panel.png
+│       └── curiovex-panel-detail.png
 ├── backend/
 │   ├── main.py
 │   └── requirements.txt
 ├── contents/
 │   └── youtube.ts
 ├── package.json
+├── LICENSE
 └── README.md
 ```
 
-## Getting Started
+## Backend Setup
 
-### Prerequisites
-
-Make sure you have:
-
-- Node.js installed
-- Python 3.9 or newer
-- Google Chrome or a Chromium-based browser
-- A Groq API key
-
-### 1. Install Extension Dependencies
-
-```bash
-npm install
-```
-
-### 2. Configure The Backend
+Create and activate a Python environment:
 
 ```bash
 cd backend
 python3 -m venv venv
 source venv/bin/activate
+```
+
+On Windows:
+
+```bash
+venv\Scripts\activate
+```
+
+Install dependencies:
+
+```bash
 pip install -r requirements.txt
 ```
 
-Create a `.env` file inside `backend/`:
+Create `backend/.env`:
 
 ```env
-GROQ_API_KEY=your_groq_api_key_here
+GROQ_API_KEY=your_groq_api_key
 ```
 
-### 3. Start The Backend Server
-
-Run this from the `backend/` directory:
+Start the backend:
 
 ```bash
-uvicorn main:app --host 127.0.0.1 --port 8000 --reload
+uvicorn main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-The extension expects the API to be available at:
+The extension expects the backend at:
 
 ```text
 http://127.0.0.1:8000/analyze
 ```
 
-### 4. Run The Extension In Development
+## Extension Setup
 
-From the project root:
+Install dependencies from the project root:
+
+```bash
+npm install
+```
+
+Run the development build:
 
 ```bash
 npm run dev
 ```
 
-Plasmo will generate a development build that can be loaded into Chrome.
-
-### 5. Build For Production
+Create a production build:
 
 ```bash
 npm run build
 ```
 
-Then load this folder in Chrome:
-
-```text
-build/chrome-mv3-prod
-```
-
-## Loading In Chrome
+## Load Into Chrome
 
 1. Open `chrome://extensions/`.
 2. Enable Developer mode.
 3. Click Load unpacked.
-4. Select the generated extension folder.
-5. Open any YouTube video and wait for the Curiovex AI panel to appear.
+4. Select `build/chrome-mv3-prod`.
+5. Open a YouTube video.
+6. The Curiovex panel appears inside the YouTube interface.
 
-## API Response Shape
+## AI Prompting Strategy
 
-The backend returns structured analysis data like this:
+Curiovex uses minimal prompting by design.
 
-```json
-{
-  "success": true,
-  "summary": "Short English summary of the video.",
-  "tags": ["AI", "Learning", "Productivity"],
-  "key_insights": [
-    "Important idea from the video.",
-    "Another useful insight."
-  ],
-  "action_items": [
-    "A practical next step.",
-    "Another action to take."
-  ],
-  "difficulty": "Intermediate",
-  "learning_value": "High",
-  "suitable_for": "Students, founders, researchers, and curious learners."
-}
+No prompt trees. No multi-agent orchestration. No browser-side model loading. No streaming transport layer.
+
+The backend sends the transcript with a concise instruction and asks the model for structured output. This keeps the system easier to reason about and reduces failure points.
+
+## Performance Choices
+
+### Transcript Truncation
+
+Large transcripts can slow inference, exceed token budgets, and create timeout failures. Curiovex trims transcript text before sending it to the model:
+
+```python
+text = text[:1500]
 ```
 
-## Available Scripts
+### Fast Groq Inference
 
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Start the Plasmo development server. |
-| `npm run build` | Build the Chrome MV3 extension. |
-| `npm run package` | Package the extension for distribution. |
+The backend uses a fast Groq-hosted 8B-class model for low-latency local development. The exact model name is configured in `backend/main.py`, making it easy to switch as Groq model availability changes.
 
-## Notes
+## Engineering Lessons
 
-- The backend currently analyzes the first transcript it can fetch, preferring English and Hindi transcripts when available.
-- The transcript is trimmed before being sent to the model to keep requests fast.
-- The extension calls a local backend, so the FastAPI server must be running before opening a YouTube video.
+The biggest lesson from building Curiovex:
+
+> Build the smallest working system first.
+
+The project became stable only after removing complexity, eliminating local AI inference, simplifying transport, and reducing the inference load.
 
 ## Roadmap
 
-- Add an options page for API endpoint configuration.
-- Add a loading state while analysis is running.
-- Add transcript language and model selection.
-- Cache recent analyses locally.
-- Add screenshot assets for the GitHub README.
+- Founder mode for business and startup takeaways.
+- Learning mode for educational highlights.
+- Execution mode for action-focused summaries.
+- Timestamp anchors for jumping to important moments.
+- Transcript caching to avoid repeated fetches.
+- Configurable backend URL from an options page.
+- Lightweight semantic ranking after the stable base is complete.
 
-## Author
+## Contributing
 
-Built by **Vindhya Verma - IITJ**.
+Pull requests are welcome. For major changes, please open an issue first and discuss the architecture.
+
+The project prioritizes simplicity, stability, and clear debugging over adding complex AI layers too early.
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE).
+
+## Creator
+
+Built by **Vindhya Verma**.
 
 <div align="center">
-  <strong>Curiovex AI turns passive watching into active understanding.</strong>
+  <strong>Curiovex is an experiment in lightweight AI-assisted knowledge extraction for the modern web.</strong>
 </div>
